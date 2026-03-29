@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pub Darts">
+    <meta name="theme-color" content="#0a0a0a">
+    
+    <title>Pub Darts Scoreboard</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23000' width='192' height='192'/><text x='96' y='130' font-size='100' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
+    <link rel="apple-touch-icon" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23000' width='180' height='180'/><text x='90' y='130' font-size='90' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            user-select: none;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        body {
+            -webkit-app-region: no-drag;
+            padding-top: max(0px, env(safe-area-inset-top));
+            padding-bottom: max(0px, env(safe-area-inset-bottom));
+            padding-left: max(0px, env(safe-area-inset-left));
+            padding-right: max(0px, env(safe-area-inset-right));
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 12px 16px;
+            padding-top: max(12px, calc(12px + env(safe-area-inset-top)));
+            border-bottom: 3px solid #00ff00;
+            text-align: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .app-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+
+        /* Setup Section */
+        .setup-section {
+            background: #1a1a2e;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #0066cc;
+            margin-bottom: 12px;
+        }
+
+        .setup-section h2 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #00ccff;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            display: block;
+            margin-bottom: 6px;
+            color: #aaa;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            background: #0a0a0a;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #00ff00;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+        }
+
+        .score-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .score-btn {
+            padding: 12px;
+            border: 2px solid #333;
+            background: #0a0a0a;
+            color: #fff;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .score-btn.selected {
+            background: #00ff00;
+            color: #000;
+            border-color: #00ff00;
+            box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
+        }
+
+        .score-btn:active:not(.selected) {
+            transform: scale(0.95);
+            background: #1a1a2e;
+        }
+
+        .btn-start {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 12px;
+            box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+            transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-start:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(0, 255, 0, 0.3);
+        }
+
+        /* Game Section */
+        .game-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .player-card {
+            background: #1a1a2e;
+            padding: 12px;
+            border-radius: 8px;
+            border: 3px solid #333;
+            text-align: center;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .player-card.active {
+            background: #003d7a;
+            border-color: #00ff00;
+            box-shadow: 0 0 16px rgba(0, 255, 0, 0.3);
+        }
+
+        .player-name {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .player-score {
+            font-size: 38px;
+            font-weight: 700;
+            color: #ffcc00;
+            margin: 6px 0;
+        }
+
+        .player-current {
+            font-size: 16px;
+            color: #00ff00;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .dart-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .dart-btn {
+            padding: 8px 4px;
+            background: #0066cc;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .dart-btn:active {
+            background: #00ff00;
+            color: #000;
+            transform: scale(0.95);
+        }
+
+        .dart-btn.bust {
+            background: #cc0000;
+        }
+
+        .dart-btn.bust:active {
+            background: #ff4444;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+
+        .control-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .control-btn.reset {
+            background: #ff9900;
+            color: #fff;
+        }
+
+        .control-btn.reset:active {
+            background: #ffaa00;
+            transform: scale(0.95);
+        }
+
+        .control-btn.undo {
+            background: #ffcc00;
+            color: #000;
+        }
+
+        .control-btn.undo:active {
+            background: #ffdd00;
+            transform: scale(0.95);
+        }
+
+        .control-btn.end {
+            background: #00cc00;
+            color: #000;
+        }
+
+        .control-btn.end:active {
+            background: #00ff00;
+            transform: scale(0.95);
+        }
+
+        .game-inactive {
+            display: none;
+        }
+
+        .game-active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Display URL Box */
+        .display-info {
+            background: #2a2a2a;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #00ff00;
+            margin-bottom: 12px;
+        }
+
+        .display-info p {
+            font-size: 11px;
+            margin: 4px 0;
+            color: #aaa;
+        }
+
+        .display-info code {
+            background: #0a0a0a;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            display: block;
+            word-break: break-all;
+            margin: 4px 0;
+            font-size: 11px;
+        }
+
+        @supports (padding: max(0px)) {
+            body {
+                padding-bottom: max(12px, env(safe-area-inset-bottom));
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-height: 600px) {
+            .dart-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 3px;
+            }
+
+            .dart-btn {
+                padding: 6px 2px;
+                font-size: 11px;
+            }
+
+            .player-score {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="app-header">
+            <h1>🎯 PUB DARTS</h1>
+        </div>
+
+        <!-- Content Area -->
+        <div class="app-content">
+            <!-- Setup Section -->
+            <div class="setup-section" id="setupSection">
+                <h2>Game Setup</h2>
+
+                <div class="input-group">
+                    <label>Player 1</label>
+                    <input type="text" id="player1Name" value="Player 1" placeholder="Enter name" maxlength="20">
+                </div>
+
+                <div class="input-group">
+                    <label>Player 2</label>
+                    <input type="text" id="player2Name" value="Player 2" placeholder="Enter name" maxlength="20">
+                </div>
+
+                <div class="input-group">
+                    <label>Starting Score</label>
+                    <div class="score-options">
+                        <button class="score-btn selected" data-score="501">501</button>
+                        <button class="score-btn" data-score="601">601</button>
+                        <button class="score-btn" data-score="701">701</button>
+                        <button class="score-btn" data-score="801">801</button>
+                        <button class="score-btn" data-score="901">901</button>
+                        <button class="score-btn" data-score="1001">1001</button>
+                    </div>
+                </div>
+
+                <button class="btn-start" onclick="startGame()">START GAME</button>
+
+                <div class="display-info">
+                    <p><strong>📺 Display URL:</strong></p>
+                    <code id="displayUrl">https://yourusername.github.io/pub-darts/display</code>
+                    <p>Open on pub TV</p>
+                </div>
+            </div>
+
+            <!-- Game Section -->
+            <div id="gameSection" class="game-inactive">
+                <div class="game-board">
+                    <!-- Player 1 -->
+                    <div class="player-card active" id="player1Card">
+                        <div class="player-name" id="p1Name">Player 1</div>
+                        <div class="player-score" id="p1Score">501</div>
+                        <div class="player-current">
+                            <span id="p1Current">0</span>
+                        </div>
+
+                        <div class="dart-grid">
+                            <button class="dart-btn" onclick="recordDart(1, 3)">3</button>
+                            <button class="dart-btn" onclick="recordDart(1, 5)">5</button>
+                            <button class="dart-btn" onclick="recordDart(1, 10)">10</button>
+                            <button class="dart-btn" onclick="recordDart(1, 15)">15</button>
+                            <button class="dart-btn" onclick="recordDart(1, 20)">20</button>
+                            <button class="dart-btn" onclick="recordDart(1, 25)">25</button>
+                            <button class="dart-btn" onclick="recordDart(1, 50)">50</button>
+                            <button class="dart-btn" onclick="recordDart(1, 60)">60</button>
+                            <button class="dart-btn bust" onclick="recordDart(1, 0)">BUST</button>
+                        </div>
+                    </div>
+
+                    <!-- Player 2 -->
+                    <div class="player-card" id="player2Card">
+                        <div class="player-name" id="p2Name">Player 2</div>
+                        <div class="player-score" id="p2Score">501</div>
+                        <div class="player-current">
+                            <span id="p2Current">0</span>
+                        </div>
+
+                        <div class="dart-grid">
+                            <button class="dart-btn" onclick="recordDart(2, 3)">3</button>
+                            <button class="dart-btn" onclick="recordDart(2, 5)">5</button>
+                            <button class="dart-btn" onclick="recordDart(2, 10)">10</button>
+                            <button class="dart-btn" onclick="recordDart(2, 15)">15</button>
+                            <button class="dart-btn" onclick="recordDart(2, 20)">20</button>
+                            <button class="dart-btn" onclick="recordDart(2, 25)">25</button>
+                            <button class="dart-btn" onclick="recordDart(2, 50)">50</button>
+                            <button class="dart-btn" onclick="recordDart(2, 60)">60</button>
+                            <button class="dart-btn bust" onclick="recordDart(2, 0)">BUST</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="control-buttons">
+                    <button class="control-btn reset" onclick="resetDarts()">RESET</button>
+                    <button class="control-btn undo" onclick="undo()">UNDO</button>
+                    <button class="control-btn end" onclick="endTurn()">END TURN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =====================
+        // STATE MANAGEMENT
+        // =====================
+        let gameState = {
+            player1: { name: 'Player 1', score: 501, current: 0 },
+            player2: { name: 'Player 2', score: 501, current: 0 },
+            currentPlayer: 1,
+            gameActive: false,
+            dartHistory: []
+        };
+
+        let selectedScore = 501;
+
+        // =====================
+        // INITIALIZATION
+        // =====================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Register service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log('SW registration failed:', err);
+                });
+            }
+
+            // Score option selection
+            document.querySelectorAll('.score-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedScore = parseInt(this.dataset.score);
+                });
+            });
+
+            // Broadcast updates
+            setInterval(broadcastScore, 500);
+
+            // Prevent zoom on iOS
+            document.addEventListener('touchmove', function(e) {
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            // Update display URL
+            const url = window.location.href.split('/').slice(0, -1).join('/');
+            document.getElementById('displayUrl').textContent = `${url}/display`;
+        });
+
+        // =====================
+        // GAME LOGIC
+        // =====================
+        function startGame() {
+            const p1Name = document.getElementById('player1Name').value || 'Player 1';
+            const p2Name = document.getElementById('player2Name').value || 'Player 2';
+
+            gameState = {
+                player1: { name: p1Name, score: selectedScore, current: 0 },
+                player2: { name: p2Name, score: selectedScore, current: 0 },
+                currentPlayer: 1,
+                gameActive: true,
+                dartHistory: []
+            };
+
+            // UI Transition
+            document.getElementById('setupSection').classList.add('hidden');
+            document.getElementById('gameSection').classList.remove('game-inactive');
+            document.getElementById('gameSection').classList.add('game-active');
+
+            updateDisplay();
+            broadcastScore();
+        }
+
+        function recordDart(player, points) {
+            if (!gameState.gameActive) return;
+
+            gameState.dartHistory.push({
+                player: player,
+                points: points,
+                timestamp: Date.now()
+            });
+
+            if (player === gameState.currentPlayer) {
+                gameState[`player${player}`].current += points;
+            }
+
+            updateDisplay();
+        }
+
+        function resetDarts() {
+            gameState.player1.current = 0;
+            gameState.player2.current = 0;
+            gameState.dartHistory = [];
+            updateDisplay();
+        }
+
+        function undo() {
+            if (gameState.dartHistory.length === 0) return;
+            const lastDart = gameState.dartHistory.pop();
+            gameState[`player${lastDart.player}`].current -= lastDart.points;
+            if (gameState[`player${lastDart.player}`].current < 0) {
+                gameState[`player${lastDart.player}`].current = 0;
+            }
+            updateDisplay();
+        }
+
+        function endTurn() {
+            const player = gameState.currentPlayer;
+            const playerKey = `player${player}`;
+            const newScore = gameState[playerKey].score - gameState[playerKey].current;
+
+            if (newScore < 0) {
+                gameState[playerKey].current = 0;
+                alert('BUST! Score reset.');
+            } else if (newScore === 0) {
+                alert(`🎉 ${gameState[playerKey].name} WINS! 🎉`);
+                gameState.gameActive = false;
+                resetGame();
+                return;
+            } else {
+                gameState[playerKey].score = newScore;
+            }
+
+            gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
+            gameState.player1.current = 0;
+            gameState.player2.current = 0;
+            gameState.dartHistory = [];
+
+            updateDisplay();
+        }
+
+        function resetGame() {
+            document.getElementById('setupSection').classList.remove('hidden');
+            document.getElementById('gameSection').classList.add('game-inactive');
+            document.getElementById('gameSection').classList.remove('game-active');
+        }
+
+        // =====================
+        // UI UPDATES
+        // =====================
+        function updateDisplay() {
+            document.getElementById('p1Name').textContent = gameState.player1.name;
+            document.getElementById('p1Score').textContent = gameState.player1.score;
+            document.getElementById('p1Current').textContent = gameState.player1.current;
+
+            document.getElementById('p2Name').textContent = gameState.player2.name;
+            document.getElementById('p2Score').textContent = gameState.player2.score;
+            document.getElementById('p2Current').textContent = gameState.player2.current;
+
+            document.getElementById('player1Card').classList.toggle('active', gameState.currentPlayer === 1);
+            document.getElementById('player2Card').classList.toggle('active', gameState.currentPlayer === 2);
+
+            broadcastScore();
+        }
+
+        // =====================
+        // BROADCASTING
+        // =====================
+        function broadcastScore() {
+            localStorage.setItem('darts_gameState', JSON.stringify(gameState));
+        }
+    </script>
+</body>
+</html>
