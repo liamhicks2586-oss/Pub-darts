@@ -11,8 +11,8 @@
     <title>Pub Darts Scoreboard</title>
     
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23000' width='192' height='192'/><text x='96' y='130' font-size='100' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23000' width='180' height='180'/><text x='90' y='130' font-size='90' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
+    <link rel="icon" type="image/png" sizes="192x192" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23000' width='192' height='192'/><text x='96' y='130' font-size='100' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
+    <link rel="apple-touch-icon" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23000' width='180' height='180'/><text x='90' y='130' font-size='90' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
     
     <style>
         * {
@@ -375,19 +375,9 @@
             color: #fff;
         }
 
-        .control-btn.reset:active {
-            background: #ffaa00;
-            transform: scale(0.95);
-        }
-
         .control-btn.undo {
             background: #ffcc00;
             color: #000;
-        }
-
-        .control-btn.undo:active {
-            background: #ffdd00;
-            transform: scale(0.95);
         }
 
         .control-btn.end {
@@ -395,19 +385,9 @@
             color: #000;
         }
 
-        .control-btn.end:active {
-            background: #00ff00;
-            transform: scale(0.95);
-        }
-
         .control-btn.quit {
             background: #cc0000;
             color: #fff;
-        }
-
-        .control-btn.quit:active {
-            background: #ff0000;
-            transform: scale(0.95);
         }
 
         .game-inactive {
@@ -529,21 +509,17 @@
                         <div class="player-score" id="p1Score">501</div>
                         <div class="player-current">This Turn: <span id="p1Current">0</span></div>
                         <div class="dart-info">Darts: <span id="p1Darts">0</span>/3</div>
-                        
                         <div class="mode-toggle">
                             <button class="mode-btn active" onclick="setMode(1, 'single')" data-mode="single">Single Dart</button>
                             <button class="mode-btn" onclick="setMode(1, 'total')" data-mode="total">Total 3</button>
                         </div>
-
                         <div class="scoring-mode" id="p1ModeDisplay">Single Dart Mode</div>
-
                         <div class="custom-input-section">
                             <div class="custom-input-row">
                                 <input type="number" id="p1CustomInput" placeholder="Enter score" min="0" max="180">
                                 <button class="custom-submit-btn" onclick="recordCustomScore(1)">Add</button>
                             </div>
                         </div>
-
                         <div class="dart-grid">
                             <button class="dart-btn" onclick="recordDart(1, 1)">1</button>
                             <button class="dart-btn" onclick="recordDart(1, 2)">2</button>
@@ -569,21 +545,17 @@
                         <div class="player-score" id="p2Score">501</div>
                         <div class="player-current">This Turn: <span id="p2Current">0</span></div>
                         <div class="dart-info">Darts: <span id="p2Darts">0</span>/3</div>
-                        
                         <div class="mode-toggle">
                             <button class="mode-btn" onclick="setMode(2, 'single')" data-mode="single">Single Dart</button>
                             <button class="mode-btn active" onclick="setMode(2, 'total')" data-mode="total">Total 3</button>
                         </div>
-
                         <div class="scoring-mode" id="p2ModeDisplay">Total 3 Darts Mode</div>
-
                         <div class="custom-input-section">
                             <div class="custom-input-row">
                                 <input type="number" id="p2CustomInput" placeholder="Enter score" min="0" max="180">
                                 <button class="custom-submit-btn" onclick="recordCustomScore(2)">Add</button>
                             </div>
                         </div>
-
                         <div class="dart-grid">
                             <button class="dart-btn" onclick="recordDart(2, 1)">1</button>
                             <button class="dart-btn" onclick="recordDart(2, 2)">2</button>
@@ -628,9 +600,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').catch(err => {
-                    console.log('SW registration failed:', err);
-                });
+                navigator.serviceWorker.register('sw.js').catch(() => {});
             }
 
             document.querySelectorAll('.score-btn').forEach(btn => {
@@ -642,37 +612,28 @@
             });
 
             setInterval(broadcastScore, 100);
-
             document.addEventListener('touchmove', function(e) {
-                if (e.touches.length > 1) {
-                    e.preventDefault();
-                }
+                if (e.touches.length > 1) e.preventDefault();
             }, { passive: false });
         });
 
         function setMode(player, mode) {
             gameState[`player${player}`].mode = mode;
-            
-            const modeDisplay = document.getElementById(`p${player}ModeDisplay`);
-            modeDisplay.textContent = mode === 'single' ? 'Single Dart Mode' : 'Total 3 Darts Mode';
-            
-            const buttons = document.querySelectorAll(`#player${player}Card .mode-btn`);
-            buttons.forEach(btn => {
+            document.getElementById(`p${player}ModeDisplay`).textContent =
+                mode === 'single' ? 'Single Dart Mode' : 'Total 3 Darts Mode';
+            document.querySelectorAll(`#player${player}Card .mode-btn`).forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.mode === mode);
             });
-            
             broadcastScore();
         }
 
         function recordCustomScore(player) {
             const input = document.getElementById(`p${player}CustomInput`);
             const score = parseInt(input.value);
-            
             if (isNaN(score) || score < 0 || score > 180) {
                 alert('Please enter a valid score (0-180)');
                 return;
             }
-
             recordDart(player, score);
             input.value = '';
         }
@@ -682,13 +643,7 @@
             if (player !== gameState.currentPlayer) return;
 
             const mode = gameState[`player${player}`].mode;
-
-            gameState.dartHistory.push({
-                player: player,
-                points: points,
-                timestamp: Date.now()
-            });
-
+            gameState.dartHistory.push({ player, points, timestamp: Date.now() });
             gameState[`player${player}`].current += points;
             gameState[`player${player}`].darts++;
 
@@ -697,9 +652,7 @@
 
             const dartsNeeded = mode === 'single' ? 3 : 1;
             if (gameState[`player${player}`].darts >= dartsNeeded) {
-                setTimeout(() => {
-                    endTurn();
-                }, 300);
+                setTimeout(endTurn, 300);
             }
         }
 
