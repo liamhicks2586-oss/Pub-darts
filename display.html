@@ -27,26 +27,154 @@
         .tv-container {
             width: 100%;
             height: 100vh;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+
+        .camera-section {
             display: flex;
             flex-direction: column;
-            padding: 40px;
+            gap: 10px;
+        }
+
+        .camera-feed {
+            flex: 1;
+            background: #000;
+            border: 3px solid #00ff00;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.3);
+        }
+
+        .camera-feed video,
+        .camera-feed img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-placeholder {
+            text-align: center;
+            color: #666;
+        }
+
+        .camera-placeholder p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .camera-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .camera-btn {
+            padding: 12px;
+            background: #0066cc;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+
+        .camera-btn:hover {
+            background: #0088ff;
+        }
+
+        .camera-btn:active {
+            background: #00ff00;
+            color: #000;
+            transform: scale(0.95);
+        }
+
+        .camera-btn.stop {
+            background: #cc0000;
+        }
+
+        .camera-btn.stop:hover {
+            background: #ff0000;
+        }
+
+        .ip-camera-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #1a1a2e;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #0066cc;
+        }
+
+        .ip-camera-section label {
+            font-size: 11px;
+            color: #aaa;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .ip-camera-section input {
+            padding: 8px;
+            background: #0a0a0a;
+            color: #fff;
+            border: 2px solid #333;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .ip-camera-section input:focus {
+            border-color: #00ff00;
+            outline: none;
+        }
+
+        .ip-camera-section button {
+            padding: 8px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .ip-camera-section button:hover {
+            background: #00cc00;
+        }
+
+        .ip-camera-section button:active {
+            transform: scale(0.95);
+        }
+
+        .scoreboard-section {
+            display: flex;
+            flex-direction: column;
             gap: 20px;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
         }
 
         .tv-header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             background: linear-gradient(90deg, #1a1a2e 0%, #0066cc 50%, #1a1a2e 100%);
-            border-bottom: 4px solid #00ff00;
+            border-bottom: 3px solid #00ff00;
             border-radius: 8px;
             box-shadow: 0 8px 32px rgba(0, 255, 0, 0.2);
         }
 
         .tv-logo {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 900;
             background: linear-gradient(90deg, #00ff00, #00ccff);
             -webkit-background-clip: text;
@@ -62,23 +190,16 @@
             50% { text-shadow: 0 0 40px rgba(0, 255, 0, 0.8); }
         }
 
-        .tv-branding {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: #ffaa00;
-            text-transform: uppercase;
-        }
-
         .live-badge {
             background: #ff0000;
             color: #fff;
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 4px;
             font-weight: 900;
-            font-size: 14px;
+            font-size: 12px;
             animation: pulse 1s infinite;
             letter-spacing: 1px;
+            margin-top: 8px;
         }
 
         @keyframes pulse {
@@ -87,26 +208,27 @@
         }
 
         .scoreboard {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
             flex: 1;
-            padding: 20px;
+            padding: 15px;
             background: rgba(10, 10, 10, 0.8);
             border: 3px solid #00ff00;
             border-radius: 12px;
             backdrop-filter: blur(10px);
             box-shadow: 0 0 40px rgba(0, 255, 0, 0.3), inset 0 0 40px rgba(0, 255, 0, 0.1);
+            overflow-y: auto;
         }
 
         .player-section {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
             background: linear-gradient(135deg, #1a1a2e 0%, #0066cc 50%, #1a1a2e 100%);
-            padding: 30px;
-            border-radius: 12px;
-            border: 3px solid #00ccff;
-            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #00ccff;
             transition: all 0.3s ease;
             box-shadow: 0 8px 32px rgba(0, 102, 204, 0.3);
         }
@@ -118,50 +240,52 @@
             transform: scale(1.02);
         }
 
+        .player-info {
+            flex: 1;
+        }
+
         .player-label {
-            font-size: 16px;
+            font-size: 12px;
             color: #aaa;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
             font-weight: 600;
         }
 
         .player-name {
-            font-size: 42px;
+            font-size: 24px;
             font-weight: 900;
             color: #fff;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             text-transform: uppercase;
             text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         }
 
-        .score-display {
+        .player-scores {
             display: flex;
             gap: 20px;
-            justify-content: center;
-            align-items: flex-start;
-            margin-bottom: 20px;
+            align-items: center;
         }
 
         .score-box {
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
         }
 
         .score-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #00ccff;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             font-weight: 700;
         }
 
         .score-number {
-            font-size: 64px;
+            font-size: 48px;
             font-weight: 900;
             color: #ffcc00;
             line-height: 1;
@@ -169,28 +293,27 @@
         }
 
         .current-score {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 900;
             color: #00ff00;
-            margin-top: 16px;
+            margin-top: 8px;
             text-shadow: 0 4px 12px rgba(0, 255, 0, 0.5);
         }
 
         .current-label {
-            font-size: 12px;
+            font-size: 10px;
             color: #aaa;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 8px;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
         }
 
         .turn-indicator {
-            grid-column: 1 / -1;
             background: linear-gradient(90deg, transparent, #00ff00, transparent);
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             text-align: center;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 900;
             color: #000;
             letter-spacing: 2px;
@@ -204,11 +327,11 @@
             50% { transform: scale(1.05); }
         }
 
-        .match-info {
+        .status-bar {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            padding: 20px;
+            gap: 10px;
+            padding: 12px;
             background: rgba(0, 102, 204, 0.2);
             border: 2px solid #0066cc;
             border-radius: 8px;
@@ -219,120 +342,151 @@
         }
 
         .stat-label {
-            font-size: 12px;
+            font-size: 10px;
             color: #aaa;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .stat-value {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 900;
             color: #00ff00;
         }
 
-        .tv-footer {
-            text-align: center;
-            padding: 16px;
-            border-top: 2px solid #00ff00;
-            font-size: 12px;
-            color: #aaa;
-            letter-spacing: 1px;
+        @media (max-width: 1200px) {
+            .tv-container {
+                grid-template-columns: 1fr;
+            }
+
+            .player-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .player-scores {
+                margin-top: 10px;
+                justify-content: center;
+            }
         }
 
-        @media (max-aspect-ratio: 4/3) {
+        @media (max-height: 600px) {
             .tv-container {
-                padding: 20px;
-                gap: 15px;
-            }
-
-            .scoreboard {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .player-name {
-                font-size: 32px;
-            }
-
-            .score-number {
-                font-size: 48px;
-            }
-
-            .current-score {
-                font-size: 28px;
+                gap: 10px;
+                padding: 10px;
             }
 
             .tv-logo {
                 font-size: 24px;
+            }
+
+            .score-number {
+                font-size: 36px;
+            }
+
+            .current-score {
+                font-size: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="tv-container">
-        <div class="tv-header">
-            <div class="tv-logo">🎯 PUB DARTS</div>
-            <div class="tv-branding">LIVE SCOREBOARD</div>
-            <div class="live-badge">● LIVE</div>
-        </div>
-
-        <div class="scoreboard">
-            <div class="player-section active" id="player1Section">
-                <div class="player-label">Player 1</div>
-                <div class="player-name" id="p1Name">Player 1</div>
-                
-                <div class="score-display">
-                    <div class="score-box">
-                        <div class="score-label">Total Score</div>
-                        <div class="score-number" id="p1Score">501</div>
-                    </div>
-                    <div class="score-box">
-                        <div class="score-label">This Throw</div>
-                        <div class="current-score" id="p1Current">0</div>
-                        <div class="current-label">Points</div>
-                    </div>
+        <!-- Camera Section (Left) -->
+        <div class="camera-section">
+            <div class="camera-feed" id="cameraFeed">
+                <div class="camera-placeholder">
+                    <p>📹 Camera Feed</p>
+                    <p style="font-size: 14px;">Click buttons below to start</p>
                 </div>
             </div>
 
-            <div class="player-section" id="player2Section">
-                <div class="player-label">Player 2</div>
-                <div class="player-name" id="p2Name">Player 2</div>
-                
-                <div class="score-display">
-                    <div class="score-box">
-                        <div class="score-label">Total Score</div>
-                        <div class="score-number" id="p2Score">501</div>
+            <div class="camera-controls">
+                <button class="camera-btn" onclick="startPhoneCamera()">📱 Phone Camera</button>
+                <button class="camera-btn stop" id="stopCameraBtn" onclick="stopCamera()" style="display: none;">Stop Camera</button>
+                <button class="camera-btn" onclick="toggleIPCameraForm()">📡 IP Camera</button>
+                <button class="camera-btn stop" id="stopIPCameraBtn" onclick="stopIPCamera()" style="display: none;">Stop IP</button>
+            </div>
+
+            <div class="ip-camera-section" id="ipCameraForm" style="display: none;">
+                <label>IP Camera URL (RTSP/HTTP)</label>
+                <input type="text" id="ipCameraUrl" placeholder="rtsp://192.168.1.100:554/stream" value="">
+                <button onclick="startIPCamera()">Connect IP Camera</button>
+                <p style="font-size: 11px; color: #aaa; margin-top: 8px;">
+                    Examples:<br>
+                    rtsp://192.168.1.100:554/stream<br>
+                    http://192.168.1.100:8080/video
+                </p>
+            </div>
+        </div>
+
+        <!-- Scoreboard Section (Right) -->
+        <div class="scoreboard-section">
+            <div class="tv-header">
+                <div class="tv-logo">🎯 PUB DARTS</div>
+                <div class="live-badge">● LIVE</div>
+            </div>
+
+            <div class="scoreboard">
+                <div class="player-section active" id="player1Section">
+                    <div class="player-info">
+                        <div class="player-label">Player 1</div>
+                        <div class="player-name" id="p1Name">Player 1</div>
                     </div>
-                    <div class="score-box">
-                        <div class="score-label">This Throw</div>
-                        <div class="current-score" id="p2Current">0</div>
-                        <div class="current-label">Points</div>
+                    
+                    <div class="player-scores">
+                        <div class="score-box">
+                            <div class="score-label">Total Score</div>
+                            <div class="score-number" id="p1Score">501</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">This Turn</div>
+                            <div class="current-score" id="p1Current">0</div>
+                            <div class="current-label">Points</div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="player-section" id="player2Section">
+                    <div class="player-info">
+                        <div class="player-label">Player 2</div>
+                        <div class="player-name" id="p2Name">Player 2</div>
+                    </div>
+                    
+                    <div class="player-scores">
+                        <div class="score-box">
+                            <div class="score-label">Total Score</div>
+                            <div class="score-number" id="p2Score">501</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">This Turn</div>
+                            <div class="current-score" id="p2Current">0</div>
+                            <div class="current-label">Points</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="turn-indicator" id="turnIndicator">Player 1's Turn</div>
             </div>
 
-            <div class="turn-indicator" id="turnIndicator">Player 1's Turn</div>
-        </div>
-
-        <div class="match-info">
-            <div class="stat">
-                <div class="stat-label">Status</div>
-                <div class="stat-value" id="gameStatus">Ready</div>
+            <div class="status-bar">
+                <div class="stat">
+                    <div class="stat-label">Status</div>
+                    <div class="stat-value" id="gameStatus">Ready</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Last Update</div>
+                    <div class="stat-value" id="lastUpdate">--:--</div>
+                </div>
             </div>
-            <div class="stat">
-                <div class="stat-label">Last Updated</div>
-                <div class="stat-value" id="lastUpdate">--:--</div>
-            </div>
-        </div>
-
-        <div class="tv-footer">
-            🎯 PUB DARTS LIVE SCOREBOARD | REAL-TIME UPDATES | POWERED BY GITHUB PAGES
         </div>
     </div>
 
     <script>
+        let cameraStream = null;
+        let ipCameraImage = null;
+
         function updateScoreDisplay(gameState) {
             if (!gameState) return;
 
@@ -363,6 +517,120 @@
             document.getElementById('lastUpdate').textContent = `${hours}:${mins}`;
         }
 
+        function startPhoneCamera() {
+            const video = document.createElement('video');
+            video.autoplay = true;
+            video.playsinline = true;
+            video.setAttribute('webkit-playsinline', 'true');
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.objectFit = 'cover';
+
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'user',
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                },
+                audio: false
+            }).then(stream => {
+                cameraStream = stream;
+                video.srcObject = stream;
+                
+                const feed = document.getElementById('cameraFeed');
+                feed.innerHTML = '';
+                feed.appendChild(video);
+                
+                document.getElementById('stopCameraBtn').style.display = 'block';
+                console.log('✅ Phone camera started');
+            }).catch(error => {
+                alert('Camera access denied. Please allow camera access in settings.');
+                console.error('Camera error:', error);
+            });
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            
+            const feed = document.getElementById('cameraFeed');
+            feed.innerHTML = `
+                <div class="camera-placeholder">
+                    <p>📹 Camera Feed</p>
+                    <p style="font-size: 14px;">Click buttons above to start</p>
+                </div>
+            `;
+            document.getElementById('stopCameraBtn').style.display = 'none';
+            console.log('✅ Phone camera stopped');
+        }
+
+        function toggleIPCameraForm() {
+            const form = document.getElementById('ipCameraForm');
+            form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function startIPCamera() {
+            const url = document.getElementById('ipCameraUrl').value.trim();
+            
+            if (!url) {
+                alert('Please enter a camera URL');
+                return;
+            }
+
+            // Stop phone camera if running
+            stopCamera();
+
+            // Create image element for IP camera
+            const img = document.createElement('img');
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            
+            // Try to load the image
+            img.onload = () => {
+                const feed = document.getElementById('cameraFeed');
+                feed.innerHTML = '';
+                feed.appendChild(img);
+                document.getElementById('stopIPCameraBtn').style.display = 'block';
+                console.log('✅ IP Camera connected:', url);
+                
+                // Refresh image every 500ms for live stream
+                setInterval(() => {
+                    if (ipCameraImage) {
+                        img.src = url + '?' + new Date().getTime();
+                    }
+                }, 500);
+            };
+
+            img.onerror = () => {
+                alert('Failed to connect to IP camera. Check the URL and CORS settings.');
+                console.error('IP Camera error - URL may not be accessible');
+            };
+
+            // Set cross-origin to allow CORS
+            img.crossOrigin = 'anonymous';
+            img.src = url + '?' + new Date().getTime();
+            
+            ipCameraImage = img;
+        }
+
+        function stopIPCamera() {
+            ipCameraImage = null;
+            
+            const feed = document.getElementById('cameraFeed');
+            feed.innerHTML = `
+                <div class="camera-placeholder">
+                    <p>📹 Camera Feed</p>
+                    <p style="font-size: 14px;">Click buttons above to start</p>
+                </div>
+            `;
+            document.getElementById('stopIPCameraBtn').style.display = 'none';
+            console.log('✅ IP camera stopped');
+        }
+
+        // Score sync
         window.addEventListener('storage', (e) => {
             if (e.key === 'darts_gameState' && e.newValue) {
                 updateScoreDisplay(JSON.parse(e.newValue));
