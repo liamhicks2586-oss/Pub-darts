@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pub-darts-v3';
+const CACHE_NAME = 'pub-darts-v4';
 const APP_SHELL = [
   './',
   './index.html',
@@ -29,8 +29,8 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request).catch(() =>
+      caches.match(event.request).then(r => r || caches.match('./index.html'))
+    )
   );
 });
