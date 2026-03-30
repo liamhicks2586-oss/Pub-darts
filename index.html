@@ -11,8 +11,8 @@
     <title>Pub Darts Scoreboard</title>
     
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23000' width='192' height='192'/><text x='96' y='130' font-size='100' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
-    <link rel="apple-touch-icon" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23000' width='180' height='180'/><text x='90' y='130' font-size='90' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23000' width='192' height='192'/><text x='96' y='130' font-size='100' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23000' width='180' height='180'/><text x='90' y='130' font-size='90' fill='%2300ff00' text-anchor='middle' font-weight='bold'>🎯</text></svg>">
     
     <style>
         * {
@@ -79,7 +79,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Setup Section */
         .setup-section {
             background: #1a1a2e;
             padding: 16px;
@@ -183,7 +182,6 @@
             box-shadow: 0 2px 8px rgba(0, 255, 0, 0.3);
         }
 
-        /* Game Section */
         .game-board {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -228,15 +226,31 @@
         }
 
         .player-current {
-            font-size: 16px;
+            font-size: 14px;
             color: #00ff00;
             margin-bottom: 8px;
             font-weight: 600;
         }
 
+        .dart-info {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        .scoring-mode {
+            background: #0066cc;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+        }
+
         .dart-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 4px;
             margin-bottom: 8px;
         }
@@ -248,7 +262,7 @@
             border: none;
             border-radius: 4px;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             transition: all 0.2s;
             -webkit-tap-highlight-color: transparent;
@@ -266,6 +280,72 @@
 
         .dart-btn.bust:active {
             background: #ff4444;
+        }
+
+        .custom-input-section {
+            background: #1a2040;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .custom-input-row {
+            display: flex;
+            gap: 6px;
+        }
+
+        .custom-input-row input {
+            flex: 1;
+            padding: 8px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .custom-submit-btn {
+            padding: 8px 12px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .custom-submit-btn:active {
+            background: #00cc00;
+            transform: scale(0.95);
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 8px;
+            background: #0066cc;
+            color: #fff;
+            border: 2px solid #0066cc;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mode-btn.active {
+            background: #00ff00;
+            color: #000;
+            border-color: #00ff00;
+        }
+
+        .mode-btn:active:not(.active) {
+            transform: scale(0.95);
         }
 
         .control-buttons {
@@ -331,7 +411,6 @@
             display: none !important;
         }
 
-        /* Display URL Box */
         .display-info {
             background: #2a2a2a;
             padding: 12px;
@@ -364,16 +443,15 @@
             }
         }
 
-        /* Responsive adjustments */
         @media (max-height: 600px) {
             .dart-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
                 gap: 3px;
             }
 
             .dart-btn {
                 padding: 6px 2px;
-                font-size: 11px;
+                font-size: 10px;
             }
 
             .player-score {
@@ -384,14 +462,11 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
         <div class="app-header">
             <h1>🎯 PUB DARTS</h1>
         </div>
 
-        <!-- Content Area -->
         <div class="app-content">
-            <!-- Setup Section -->
             <div class="setup-section" id="setupSection">
                 <h2>Game Setup</h2>
 
@@ -421,58 +496,94 @@
 
                 <div class="display-info">
                     <p><strong>📺 Display URL:</strong></p>
-                    <code id="displayUrl">https://yourusername.github.io/pub-darts/display</code>
+                    <code id="displayUrl">https://liamhicks2586-oss.github.io/pub-darts/display</code>
                     <p>Open on pub TV</p>
                 </div>
             </div>
 
-            <!-- Game Section -->
             <div id="gameSection" class="game-inactive">
                 <div class="game-board">
-                    <!-- Player 1 -->
                     <div class="player-card active" id="player1Card">
                         <div class="player-name" id="p1Name">Player 1</div>
                         <div class="player-score" id="p1Score">501</div>
-                        <div class="player-current">
-                            <span id="p1Current">0</span>
+                        <div class="player-current">This Turn: <span id="p1Current">0</span></div>
+                        <div class="dart-info">Darts: <span id="p1Darts">0</span>/3</div>
+                        
+                        <div class="mode-toggle">
+                            <button class="mode-btn active" onclick="setMode(1, 'single')" data-mode="single">Single Dart</button>
+                            <button class="mode-btn" onclick="setMode(1, 'total')" data-mode="total">Total 3</button>
+                        </div>
+
+                        <div class="scoring-mode" id="p1ModeDisplay">Single Dart Mode</div>
+
+                        <div class="custom-input-section">
+                            <div class="custom-input-row">
+                                <input type="number" id="p1CustomInput" placeholder="Enter score" min="0" max="180">
+                                <button class="custom-submit-btn" onclick="recordCustomScore(1)">Add</button>
+                            </div>
                         </div>
 
                         <div class="dart-grid">
+                            <button class="dart-btn" onclick="recordDart(1, 1)">1</button>
+                            <button class="dart-btn" onclick="recordDart(1, 2)">2</button>
                             <button class="dart-btn" onclick="recordDart(1, 3)">3</button>
                             <button class="dart-btn" onclick="recordDart(1, 5)">5</button>
                             <button class="dart-btn" onclick="recordDart(1, 10)">10</button>
+                            <button class="dart-btn" onclick="recordDart(1, 11)">11</button>
                             <button class="dart-btn" onclick="recordDart(1, 15)">15</button>
+                            <button class="dart-btn" onclick="recordDart(1, 16)">16</button>
+                            <button class="dart-btn" onclick="recordDart(1, 18)">18</button>
                             <button class="dart-btn" onclick="recordDart(1, 20)">20</button>
                             <button class="dart-btn" onclick="recordDart(1, 25)">25</button>
                             <button class="dart-btn" onclick="recordDart(1, 50)">50</button>
                             <button class="dart-btn" onclick="recordDart(1, 60)">60</button>
+                            <button class="dart-btn" onclick="recordDart(1, 100)">100</button>
+                            <button class="dart-btn" onclick="recordDart(1, 125)">125</button>
                             <button class="dart-btn bust" onclick="recordDart(1, 0)">BUST</button>
                         </div>
                     </div>
 
-                    <!-- Player 2 -->
                     <div class="player-card" id="player2Card">
                         <div class="player-name" id="p2Name">Player 2</div>
                         <div class="player-score" id="p2Score">501</div>
-                        <div class="player-current">
-                            <span id="p2Current">0</span>
+                        <div class="player-current">This Turn: <span id="p2Current">0</span></div>
+                        <div class="dart-info">Darts: <span id="p2Darts">0</span>/3</div>
+                        
+                        <div class="mode-toggle">
+                            <button class="mode-btn" onclick="setMode(2, 'single')" data-mode="single">Single Dart</button>
+                            <button class="mode-btn active" onclick="setMode(2, 'total')" data-mode="total">Total 3</button>
+                        </div>
+
+                        <div class="scoring-mode" id="p2ModeDisplay">Total 3 Darts Mode</div>
+
+                        <div class="custom-input-section">
+                            <div class="custom-input-row">
+                                <input type="number" id="p2CustomInput" placeholder="Enter score" min="0" max="180">
+                                <button class="custom-submit-btn" onclick="recordCustomScore(2)">Add</button>
+                            </div>
                         </div>
 
                         <div class="dart-grid">
+                            <button class="dart-btn" onclick="recordDart(2, 1)">1</button>
+                            <button class="dart-btn" onclick="recordDart(2, 2)">2</button>
                             <button class="dart-btn" onclick="recordDart(2, 3)">3</button>
                             <button class="dart-btn" onclick="recordDart(2, 5)">5</button>
                             <button class="dart-btn" onclick="recordDart(2, 10)">10</button>
+                            <button class="dart-btn" onclick="recordDart(2, 11)">11</button>
                             <button class="dart-btn" onclick="recordDart(2, 15)">15</button>
+                            <button class="dart-btn" onclick="recordDart(2, 16)">16</button>
+                            <button class="dart-btn" onclick="recordDart(2, 18)">18</button>
                             <button class="dart-btn" onclick="recordDart(2, 20)">20</button>
                             <button class="dart-btn" onclick="recordDart(2, 25)">25</button>
                             <button class="dart-btn" onclick="recordDart(2, 50)">50</button>
                             <button class="dart-btn" onclick="recordDart(2, 60)">60</button>
+                            <button class="dart-btn" onclick="recordDart(2, 100)">100</button>
+                            <button class="dart-btn" onclick="recordDart(2, 125)">125</button>
                             <button class="dart-btn bust" onclick="recordDart(2, 0)">BUST</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Control Buttons -->
                 <div class="control-buttons">
                     <button class="control-btn reset" onclick="resetDarts()">RESET</button>
                     <button class="control-btn undo" onclick="undo()">UNDO</button>
@@ -483,12 +594,9 @@
     </div>
 
     <script>
-        // =====================
-        // STATE MANAGEMENT
-        // =====================
         let gameState = {
-            player1: { name: 'Player 1', score: 501, current: 0 },
-            player2: { name: 'Player 2', score: 501, current: 0 },
+            player1: { name: 'Player 1', score: 501, current: 0, darts: 0, mode: 'single' },
+            player2: { name: 'Player 2', score: 501, current: 0, darts: 0, mode: 'total' },
             currentPlayer: 1,
             gameActive: false,
             dartHistory: []
@@ -496,18 +604,13 @@
 
         let selectedScore = 501;
 
-        // =====================
-        // INITIALIZATION
-        // =====================
         document.addEventListener('DOMContentLoaded', () => {
-            // Register service worker
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js').catch(err => {
                     console.log('SW registration failed:', err);
                 });
             }
 
-            // Score option selection
             document.querySelectorAll('.score-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('selected'));
@@ -516,47 +619,47 @@
                 });
             });
 
-            // Broadcast updates
-            setInterval(broadcastScore, 500);
+            setInterval(broadcastScore, 100);
 
-            // Prevent zoom on iOS
             document.addEventListener('touchmove', function(e) {
                 if (e.touches.length > 1) {
                     e.preventDefault();
                 }
             }, { passive: false });
-
-            // Update display URL
-            const url = window.location.href.split('/').slice(0, -1).join('/');
-            document.getElementById('displayUrl').textContent = `${url}/display`;
         });
 
-        // =====================
-        // GAME LOGIC
-        // =====================
-        function startGame() {
-            const p1Name = document.getElementById('player1Name').value || 'Player 1';
-            const p2Name = document.getElementById('player2Name').value || 'Player 2';
-
-            gameState = {
-                player1: { name: p1Name, score: selectedScore, current: 0 },
-                player2: { name: p2Name, score: selectedScore, current: 0 },
-                currentPlayer: 1,
-                gameActive: true,
-                dartHistory: []
-            };
-
-            // UI Transition
-            document.getElementById('setupSection').classList.add('hidden');
-            document.getElementById('gameSection').classList.remove('game-inactive');
-            document.getElementById('gameSection').classList.add('game-active');
-
-            updateDisplay();
+        function setMode(player, mode) {
+            gameState[`player${player}`].mode = mode;
+            
+            const modeDisplay = document.getElementById(`p${player}ModeDisplay`);
+            modeDisplay.textContent = mode === 'single' ? 'Single Dart Mode' : 'Total 3 Darts Mode';
+            
+            const buttons = document.querySelectorAll(`#player${player}Card .mode-btn`);
+            buttons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+            
             broadcastScore();
+        }
+
+        function recordCustomScore(player) {
+            const input = document.getElementById(`p${player}CustomInput`);
+            const score = parseInt(input.value);
+            
+            if (isNaN(score) || score < 0 || score > 180) {
+                alert('Please enter a valid score (0-180)');
+                return;
+            }
+
+            recordDart(player, score);
+            input.value = '';
         }
 
         function recordDart(player, points) {
             if (!gameState.gameActive) return;
+            if (player !== gameState.currentPlayer) return;
+
+            const mode = gameState[`player${player}`].mode;
 
             gameState.dartHistory.push({
                 player: player,
@@ -564,18 +667,28 @@
                 timestamp: Date.now()
             });
 
-            if (player === gameState.currentPlayer) {
-                gameState[`player${player}`].current += points;
-            }
+            gameState[`player${player}`].current += points;
+            gameState[`player${player}`].darts++;
 
             updateDisplay();
+            broadcastScore();
+
+            const dartsNeeded = mode === 'single' ? 3 : 1;
+            if (gameState[`player${player}`].darts >= dartsNeeded) {
+                setTimeout(() => {
+                    endTurn();
+                }, 300);
+            }
         }
 
         function resetDarts() {
             gameState.player1.current = 0;
             gameState.player2.current = 0;
+            gameState.player1.darts = 0;
+            gameState.player2.darts = 0;
             gameState.dartHistory = [];
             updateDisplay();
+            broadcastScore();
         }
 
         function undo() {
@@ -585,7 +698,11 @@
             if (gameState[`player${lastDart.player}`].current < 0) {
                 gameState[`player${lastDart.player}`].current = 0;
             }
+            if (lastDart.player === gameState.currentPlayer) {
+                gameState[`player${lastDart.player}`].darts--;
+            }
             updateDisplay();
+            broadcastScore();
         }
 
         function endTurn() {
@@ -595,6 +712,7 @@
 
             if (newScore < 0) {
                 gameState[playerKey].current = 0;
+                gameState[playerKey].darts = 0;
                 alert('BUST! Score reset.');
             } else if (newScore === 0) {
                 alert(`🎉 ${gameState[playerKey].name} WINS! 🎉`);
@@ -608,9 +726,12 @@
             gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
             gameState.player1.current = 0;
             gameState.player2.current = 0;
+            gameState.player1.darts = 0;
+            gameState.player2.darts = 0;
             gameState.dartHistory = [];
 
             updateDisplay();
+            broadcastScore();
         }
 
         function resetGame() {
@@ -619,27 +740,41 @@
             document.getElementById('gameSection').classList.remove('game-active');
         }
 
-        // =====================
-        // UI UPDATES
-        // =====================
+        function startGame() {
+            const p1Name = document.getElementById('player1Name').value || 'Player 1';
+            const p2Name = document.getElementById('player2Name').value || 'Player 2';
+
+            gameState = {
+                player1: { name: p1Name, score: selectedScore, current: 0, darts: 0, mode: 'single' },
+                player2: { name: p2Name, score: selectedScore, current: 0, darts: 0, mode: 'total' },
+                currentPlayer: 1,
+                gameActive: true,
+                dartHistory: []
+            };
+
+            document.getElementById('setupSection').classList.add('hidden');
+            document.getElementById('gameSection').classList.remove('game-inactive');
+            document.getElementById('gameSection').classList.add('game-active');
+
+            updateDisplay();
+            broadcastScore();
+        }
+
         function updateDisplay() {
             document.getElementById('p1Name').textContent = gameState.player1.name;
             document.getElementById('p1Score').textContent = gameState.player1.score;
             document.getElementById('p1Current').textContent = gameState.player1.current;
+            document.getElementById('p1Darts').textContent = gameState.player1.darts;
 
             document.getElementById('p2Name').textContent = gameState.player2.name;
             document.getElementById('p2Score').textContent = gameState.player2.score;
             document.getElementById('p2Current').textContent = gameState.player2.current;
+            document.getElementById('p2Darts').textContent = gameState.player2.darts;
 
             document.getElementById('player1Card').classList.toggle('active', gameState.currentPlayer === 1);
             document.getElementById('player2Card').classList.toggle('active', gameState.currentPlayer === 2);
-
-            broadcastScore();
         }
 
-        // =====================
-        // BROADCASTING
-        // =====================
         function broadcastScore() {
             localStorage.setItem('darts_gameState', JSON.stringify(gameState));
         }
