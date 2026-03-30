@@ -92,9 +92,11 @@
     </div>
   </div>
 
-  <div class="hint">Open the scoring page on your phone and this page on the Firestick</div>
+  <div class="hint">Firestick-safe version: uses polling only</div>
 
   <script>
+    let lastRaw = '';
+
     function render(s){
       if(!s) return;
       p1Name.textContent=s.player1.name;
@@ -112,17 +114,16 @@
       timeText.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
     }
 
-    function load(){
-      const v=localStorage.getItem('darts_gameState');
-      if(v) render(JSON.parse(v));
+    function tick(){
+      const raw=localStorage.getItem('darts_gameState')||'';
+      if(raw && raw!==lastRaw){
+        lastRaw=raw;
+        try{ render(JSON.parse(raw)); }catch(e){}
+      }
     }
 
-    window.addEventListener('storage', e => {
-      if(e.key === 'darts_gameState' && e.newValue) render(JSON.parse(e.newValue));
-    });
-
-    setInterval(load, 100);
-    load();
+    setInterval(tick, 50);
+    tick();
   </script>
 </body>
 </html>
