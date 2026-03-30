@@ -108,6 +108,7 @@
         }
 
         input[type="text"],
+        input[type="number"],
         select {
             width: 100%;
             padding: 12px;
@@ -123,6 +124,7 @@
         }
 
         input[type="text"]:focus,
+        input[type="number"]:focus,
         select:focus {
             border-color: #00ff00;
             outline: none;
@@ -350,7 +352,7 @@
 
         .control-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 8px;
             margin-bottom: 12px;
             flex-shrink: 0;
@@ -395,6 +397,16 @@
 
         .control-btn.end:active {
             background: #00ff00;
+            transform: scale(0.95);
+        }
+
+        .control-btn.quit {
+            background: #cc0000;
+            color: #fff;
+        }
+
+        .control-btn.quit:active {
+            background: #ff0000;
             transform: scale(0.95);
         }
 
@@ -456,6 +468,15 @@
 
             .player-score {
                 font-size: 32px;
+            }
+
+            .control-buttons {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+
+            .control-btn {
+                padding: 10px;
+                font-size: 11px;
             }
         }
     </style>
@@ -588,6 +609,7 @@
                     <button class="control-btn reset" onclick="resetDarts()">RESET</button>
                     <button class="control-btn undo" onclick="undo()">UNDO</button>
                     <button class="control-btn end" onclick="endTurn()">END TURN</button>
+                    <button class="control-btn quit" onclick="quitGame()">QUIT</button>
                 </div>
             </div>
         </div>
@@ -738,6 +760,13 @@
             document.getElementById('setupSection').classList.remove('hidden');
             document.getElementById('gameSection').classList.add('game-inactive');
             document.getElementById('gameSection').classList.remove('game-active');
+        }
+
+        function quitGame() {
+            if (confirm('Are you sure? This will end the game.')) {
+                gameState.gameActive = false;
+                resetGame();
+            }
         }
 
         function startGame() {
