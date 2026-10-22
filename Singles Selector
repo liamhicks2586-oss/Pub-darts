@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amman Tawe Darts League — Singles Random Selector</title>
+<style>
+  :root{
+    --red:#B31217;
+    --green:#0B6E4F;
+    --dark:#101010;
+    --cream:#FFF8E7;
+    --gold:#D4AF37;
+  }
+  *{
+    box-sizing:border-box;
+    font-family:'Trebuchet MS',Arial,Helvetica,sans-serif;
+  }
+  body{
+    margin:0;
+    min-height:100vh;
+    color:var(--cream);
+    background:var(--dark);
+    padding:24px 14px;
+  }
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    background:rgba(255,248,231,.97);
+    color:var(--dark);
+    border:4px solid var(--gold);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 12px 40px rgba(0,0,0,.65);
+  }
+  .badge{
+    width:92px;
+    height:92px;
+    margin:0 auto 10px;
+    border-radius:50%;
+    background:conic-gradient(
+      var(--red) 0 18deg,var(--green) 18deg 36deg,
+      var(--red) 36deg 54deg,var(--green) 54deg 72deg,
+      var(--red) 72deg 90deg,var(--green) 90deg 108deg,
+      var(--red) 108deg 126deg,var(--green) 126deg 144deg,
+      var(--red) 144deg 162deg,var(--green) 162deg 180deg,
+      var(--red) 180deg 198deg,var(--green) 198deg 216deg,
+      var(--red) 216deg 234deg,var(--green) 234deg 252deg,
+      var(--red) 252deg 270deg,var(--green) 270deg 288deg,
+      var(--red) 288deg 306deg,var(--green) 306deg 324deg,
+      var(--red) 324deg 342deg,var(--green) 342deg 360deg
+    );
+    border:5px solid var(--cream);
+    outline:3px solid var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .badge span{
+    width:26px;
+    height:26px;
+    background:var(--red);
+    border:4px solid var(--green);
+    border-radius:50%;
+  }
+  h1{
+    margin:0;
+    color:var(--red);
+    font-size:27px;
+    text-align:center;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .subtitle{
+    margin:4px 0 16px;
+    text-align:center;
+    color:var(--green);
+    font-weight:bold;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    font-size:13px;
+  }
+  .rule{
+    height:4px;
+    background:linear-gradient(90deg,var(--red),var(--gold),var(--green));
+    border-radius:3px;
+    margin:12px 0 18px;
+  }
+  h2{
+    margin:18px 0 8px;
+    color:var(--red);
+    font-size:16px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    border-bottom:3px solid var(--green);
+    padding-bottom:4px;
+  }
+  p.note{
+    font-size:12.5px;
+    color:#5b4a32;
+    margin-top:4px;
+  }
+  .teams{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  @media(max-width:700px){
+    .teams{grid-template-columns:1fr;}
+  }
+  .team{
+    background:#fff;
+    border:3px solid var(--green);
+    border-radius:12px;
+    padding:12px;
+  }
+  .team.home{
+    border-color:var(--red);
+  }
+  .team h3{
+    margin:0 0 8px;
+    font-size:15px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+  .team.home h3{
+    color:var(--red);
+  }
+  .team.away h3{
+    color:var(--green);
+  }
+  input{
+    width:100%;
+    padding:9px;
+    margin-bottom:7px;
+    border:2px solid #c9b98f;
+    border-radius:7px;
+    font-size:14px;
+    background:var(--cream);
+    color:var(--dark);
+  }
+  input:focus{
+    outline:none;
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(212,175,55,.25);
+  }
+  button{
+    background:linear-gradient(180deg,var(--red),#7d0c10);
+    color:#fff;
+    border:2px solid var(--gold);
+    padding:13px 18px;
+    font-size:16px;
+    font-weight:bold;
+    border-radius:10px;
+    cursor:pointer;
+    width:100%;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    box-shadow:0 4px 0 #5c090c;
+  }
+  button.green{
+    background:linear-gradient(180deg,var(--green),#074a34);
+    box-shadow:0 4px 0 #053325;
+  }
+  button.gold{
+    background:linear-gradient(180deg,var(--gold),#a8862a);
+    color:var(--dark);
+    box-shadow:0 4px 0 #7d651f;
+  }
+  button.grey{
+    background:linear-gradient(180deg,#555,#333);
+    box-shadow:0 4px 0 #222;
+  }
+  button:active{
+    transform:translateY(2px);
+    box-shadow:0 2px 0 rgba(0,0,0,.4);
+  }
+  .results{
+    margin-top:20px;
+  }
+  .hidden{
+    display:none;
+  }
+  .fixture{
+    display:flex;
+    align-items:center;
+    background:#fff;
+    border:2px solid var(--gold);
+    border-left:8px solid var(--red);
+    border-right:8px solid var(--green);
+    border-radius:9px;
+    padding:11px;
+    margin-bottom:9px;
+    font-size:15px;
+  }
+  .fixture .num{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:var(--dark);
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    margin-right:10px;
+    flex:0 0 auto;
+  }
+  .fixture .home{
+    color:var(--red);
+    font-weight:bold;
+    flex:1;
+    text-align:right;
+    padding-right:10px;
+  }
+  .fixture .away{
+    color:var(--green);
+    font-weight:bold;
+    flex:1;
+    padding-left:10px;
+  }
+  .fixture .vs{
+    color:#777;
+    font-weight:bold;
+  }
+  .actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
+  }
+  .footer{
+    text-align:center;
+    font-size:11px;
+    color:#6b5a3e;
+    margin-top:16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="badge"><span></span></div>
+
+  <h1>Amman Tawe Darts League</h1>
+  <div class="subtitle">Singles Random Selector</div>
+  <div class="rule"></div>
+
+  <div class="teams">
+    <div class="team home">
+      <h3>Home Team</h3>
+      <input id="homeTeam" placeholder="Home team name">
+      <div id="homePlayers"></div>
+    </div>
+
+    <div class="team away">
+      <h3>Away Team</h3>
+      <input id="awayTeam" placeholder="Away team name">
+      <div id="awayPlayers"></div>
+    </div>
+  </div>
+
+  <p class="note">
+    Enter six players for each team, then press the button to generate six random singles fixtures.
+  </p>
+
+  <button id="drawBtn" class="green" type="button">
+    🎯 Randomly Select Singles
+  </button>
+
+  <div class="results hidden" id="results">
+    <h2>Singles Fixtures</h2>
+    <div id="fixtures"></div>
+
+    <div class="actions">
+      <button class="gold" id="copyBtn" type="button">📋 Copy Fixtures</button>
+      <button class="grey" id="resetBtn" type="button">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Amman Tawe Darts League • Winter League 2026–2027 • League Administrator: Liam Hicks
+  </div>
+</div>
+
+<script>
+(function(){
+  var homePlayers = document.getElementById('homePlayers');
+  var awayPlayers = document.getElementById('awayPlayers');
+
+  for(var i = 1; i <= 6; i++){
+    homePlayers.insertAdjacentHTML(
+      'beforeend',
+      '<input id="h' + i + '" placeholder="Home player ' + i + '">'
+    );
+
+    awayPlayers.insertAdjacentHTML(
+      'beforeend',
+      '<input id="a' + i + '" placeholder="Away player ' + i + '">'
+    );
+  }
+
+  function getVals(prefix){
+    var vals = [];
+
+    for(var i = 1; i <= 6; i++){
+      var el = document.getElementById(prefix + i);
+      vals.push(el ? el.value.trim() : '');
+    }
+
+    return vals;
+  }
+
+  function shuffle(array){
+    var arr = array.slice();
+
+    for(var i = arr.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
+
+    return arr;
+  }
+
+  function draw(){
+    var home = getVals('h');
+    var away = getVals('a');
+
+    for(var i = 0; i < 6; i++){
+      if(!home[i] || !away[i]){
+        alert('Please enter all six players for both teams.');
+        return;
+      }
+    }
+
+    var h = shuffle(home);
+    var a = shuffle(away);
+
+    var hn = document.getElementById('homeTeam').value.trim() || 'Home';
+    var an = document.getElementById('awayTeam').value.trim() || 'Away';
+
+    var html = '';
+    var text = hn + ' v ' + an + ' — Singles Fixtures\n';
+
+    for(var n = 0; n < 6; n++){
+      html += '<div class="fixture">';
+      html += '<span class="num">' + (n + 1) + '</span>';
+      html += '<span class="home">' + h[n] + '</span>';
+      html += '<span class="vs">v</span>';
+      html += '<span class="away">' + a[n] + '</span>';
+      html += '</div>';
+
+      text += 'Singles ' + (n + 1) + ': ' + h[n] + ' v ' + a[n] + '\n';
+    }
+
+    document.getElementById('fixtures').innerHTML = html;
+    document.getElementById('results').classList.remove('hidden');
+
+    document.getElementById('copyBtn').onclick = function(){
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(function(){
+          alert('Fixtures copied.');
+        });
+      }else{
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        alert('Fixtures copied.');
+      }
+    };
+  }
+
+  function reset(){
+    var inputs = document.querySelectorAll('input');
+
+    for(var i = 0; i < inputs.length; i++){
+      inputs[i].value = '';
+    }
+
+    document.getElementById('results').classList.add('hidden');
+  }
+
+  document.getElementById('drawBtn').addEventListener('click', draw);
+  document.getElementById('resetBtn').addEventListener('click', reset);
+})();
+</script>
+
+</body>
+</html>
